@@ -1,7 +1,7 @@
 {
-  "name": "asdf",
-  "private": true,
-  "version": "0.0.0",
+  "name": "react-iluha-toasts",
+  "private": false,
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
