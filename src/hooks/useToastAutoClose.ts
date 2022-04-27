@@ -1,13 +1,22 @@
 import { useEffect } from 'react';
-import { IToast } from '../types';
+import { ToastType } from '../types';
 
+/**
+ * autoClose - defines whether to close toasts automatically or not
+ * autoCloseTime - defines when to close toasts
+ * toasts - all toasts
+ * setToasts - toasts setter
+ */
 interface IUseToastAutoCloseArgs {
   autoClose: boolean;
   autoCloseTime: number;
-  setToasts: React.Dispatch<React.SetStateAction<IToast[]>>;
-  toasts: IToast[];
+  toasts: ToastType[];
+  setToasts: React.Dispatch<React.SetStateAction<ToastType[]>>;
 }
 
+/**
+ * Custom hook for conditional toasts deletion
+ */
 const useToastAutoClose = ({
   autoClose,
   autoCloseTime,
@@ -15,7 +24,7 @@ const useToastAutoClose = ({
   toasts,
 }: IUseToastAutoCloseArgs) => {
   useEffect(() => {
-    if (!autoClose) {
+    if (!autoClose && toasts.length) {
       return undefined;
     }
 

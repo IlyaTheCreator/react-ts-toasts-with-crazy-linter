@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import helpers from '../shared/helpers';
 
+/**
+ * Custom hook for creating a portal for toasts
+ */
 const useToastPortal = () => {
   const [loaded, setLoaded] = useState(false);
   const [portalId] = useState(`toast-portal-${helpers.uuid()}`);

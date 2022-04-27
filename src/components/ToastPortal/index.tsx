@@ -1,9 +1,4 @@
-import React, {
-  forwardRef,
-  ReactPortal,
-  useImperativeHandle,
-  useState,
-} from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 import useToastPortal from '../../hooks/useToastPortal';
@@ -13,37 +8,41 @@ import helpers from '../../shared/helpers';
 
 import Toast from '../Toast';
 
-import { IToast } from '../../types';
+import { IToastPortalRef, ToastType } from '../../types';
 
 import styles from './styles.module.css';
 
+/**
+ * autoClose - defines whether to close toasts automatically or not
+ * autoCloseTime - defines when to close toasts
+ */
 interface IToastPortalProps {
   autoClose: boolean;
   autoCloseTime: number;
 }
 
-const ToastPortal = forwardRef<ReactPortal, IToastPortalProps>(
+const ToastPortal = forwardRef<IToastPortalRef, IToastPortalProps>(
   ({ autoClose, autoCloseTime = 5000 }, ref) => {
-    const [toasts, setToasts] = useState<IToast[]>([]);
+    // State for managing all toasts
+    const [toasts, setToasts] = useState<ToastType[]>([]);
     const { loaded, portalId } = useToastPortal();
 
+    // Conditional autoClose on timeout
     useToastAutoClose({ autoClose, autoCloseTime, toasts, setToasts });
 
+    // Function for removing a toast from toasts state by its id
     const removeToast = (id: string) => {
-      setToasts(prev => prev.filter((t: IToast) => t.id !== id));
+      setToasts(prev => prev.filter((t: ToastType) => t.id !== id));
     };
 
+    // Passing addMessage method to parent. There we don't need toasts' id, that's why we use Omit
     useImperativeHandle(ref, () => ({
-      addMessage(toast: IToast) {
-        setToasts((prev: IToast[]) => [
+      addMessage(toast: Omit<ToastType, 'id'>) {
+        setToasts((prev: ToastType[]) => [
           ...prev,
           { ...toast, id: helpers.uuid() },
         ]);
       },
-      key: Math.random(),
-      children: undefined,
-      props: {},
-      type: 'any',
     }));
 
     return loaded

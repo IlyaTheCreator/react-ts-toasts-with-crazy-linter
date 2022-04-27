@@ -2,21 +2,25 @@ import React, { useRef, useState } from 'react';
 
 import ToastPortal from '../ToastPortal';
 
+import { IToastPortalRef, ToastType } from '../../types';
+
 import styles from './styles.module.css';
+import ToastForm from '../ToastForm';
 
-interface IPropsRef {
-  addMessage: (obj: object) => void;
-}
-
+/**
+ * Central app's point.
+ */
 function App() {
-  const [text, setText] = useState('');
-  const [mode, setMode] = useState('info');
+  // State for managing autoClose option selection
   const [autoClose, setAutoClose] = useState(false);
 
-  const toastRef = useRef<(any & IPropsRef) | undefined>();
+  // Ref used in forwardRef in ToastPortal component
+  const toastRef = useRef<IToastPortalRef | null>(null);
 
-  const addToast = () => {
-    toastRef.current?.addMessage({ mode, autoClose, message: text });
+  // Function which triggers corresponding method we got from
+  // useImperativeHandle in ToastPortal Component
+  const addToast = (toastData: Omit<ToastType, 'id'>) => {
+    toastRef.current?.addMessage(toastData);
   };
 
   return (
@@ -28,46 +32,15 @@ function App() {
           src="/assets/toaster.svg"
           className={styles.toaster}
         />
-        <form
-          onSubmit={e => {
-            e.preventDefault();
-
-            if (text) {
-              addToast();
-              setText('');
-            }
-          }}
-        >
-          <div className={styles.autoClose}>
-            <input
-              type="checkbox"
-              checked={autoClose}
-              id="autoClose"
-              onChange={e => setAutoClose(e.target.checked)}
-            />
-            <label htmlFor="autoClose">Auto Close</label>
-          </div>
-
-          <select value={mode} onChange={e => setMode(e.target.value)}>
-            <option value="info">Info</option>
-            <option value="success">Success</option>
-            <option value="warning">Warning</option>
-            <option value="error">Error</option>
-          </select>
-
-          <input
-            type="text"
-            value={text}
-            placeholder="Toast Value"
-            onChange={e => setText(e.target.value)}
-          />
-
-          <button type="submit">Submit</button>
-        </form>
+        <ToastForm
+          addMessage={addToast}
+          autoClose={autoClose}
+          setAutoClose={setAutoClose}
+        />
       </div>
 
       <ToastPortal
-        autoCloseTime={2000}
+        autoCloseTime={700}
         autoClose={autoClose}
         ref={toastRef}
       />

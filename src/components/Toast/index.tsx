@@ -2,13 +2,22 @@ import React, { useMemo } from 'react';
 
 import styles from './styles.module.css';
 
+/**
+ * mode - selected mode for a toasts (defines it's color)
+ * message - toast text
+ * onClose - defines what happens on taost click
+ */
 interface IToastProps {
   mode: string;
   message: string;
   onClose: () => void;
 }
 
+/**
+ * Component for managing individual toast
+ */
 function Toast({ mode, message, onClose }: IToastProps) {
+  // Memoizing classes array definition to prevent unnecessary re-rendering
   const classes = useMemo(
     () => [styles.toast, styles[mode]].join(' '),
     [mode],
@@ -20,6 +29,9 @@ function Toast({ mode, message, onClose }: IToastProps) {
     }
   };
 
+  // Role "button" is necessary because of the linter we use.
+  // It forces us to also provide keyboard event, even though we won't
+  // use it.
   return (
     <div
       role="button"

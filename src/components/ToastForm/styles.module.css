@@ -1,0 +1,32 @@
+.form {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.form input[type='text'],
+.form select {
+  padding: 7px;
+  width: 220px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  box-sizing: border-box;
+  box-shadow: 0px 0px 3px #402d21;
+}
+.form button {
+  padding: 7px;
+  width: 220px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  color: #402d21;
+  font-weight: bold;
+  border-radius: 5px;
+  background-color: #9783bd;
+  box-shadow: 0px 0px 3px #402d21;
+}
+.autoClose {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+}
